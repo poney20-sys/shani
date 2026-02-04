@@ -1,92 +1,121 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fırtınadan önceki Shani</title>
-    <style>
-        :root { --p: #a855f7; --bg: #030712; --c: #111827; --t: #f9fafb; }
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: var(--bg); color: var(--t); margin: 0; padding: 20px;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a855f7' opacity='0.05'%3E%3Cpath d='M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z'/%3E%3C/svg%3E");
-        }
-        .card {
-            background: var(--c); padding: 2rem; border-radius: 24px;
-            width: 100%; max-width: 400px; border: 1px solid #1f2937; text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-        h1 { color: var(--p); font-weight: 300; font-size: 1.4rem; margin-bottom: 1.5rem; letter-spacing: 1px; }
-        textarea {
-            width: 100%; height: 100px; background: #000; border: 1px solid #374151;
-            border-radius: 12px; color: #fff; padding: 12px; font-size: 1.1rem;
-            resize: none; box-sizing: border-box; text-align: center; margin-bottom: 1rem;
-        }
-        .output-box {
-            background: rgba(168, 85, 247, 0.05); padding: 15px; border-radius: 12px;
-            border: 1px dashed var(--p); font-size: 1.3rem; color: var(--p); 
-            min-height: 40px; word-break: break-word; cursor: pointer; margin-bottom: 1rem;
-        }
-        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        button {
-            padding: 12px; border-radius: 10px; border: none; cursor: pointer;
-            font-weight: 600; font-size: 0.9rem; transition: 0.2s;
-        }
-        .btn-copy { background: #374151; color: white; }
-        .btn-wa { background: #25D366; color: white; }
-        .label { font-size: 0.8rem; color: #6b7280; margin-bottom: 5px; display: block; text-align: right; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Fırtınadan önceki Shani</title>
+  <style>
+    :root { --p: #a855f7; --bg: #030712; --c: #111827; --t: #f9fafb; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg); color: var(--t); margin: 0; padding: 20px;
+      display: flex; justify-content: center; align-items: center; min-height: 100vh;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a855f7' opacity='0.08'%3E%3Cpath d='M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: center 85%; background-size: 60% auto;
+    }
+    .card {
+      background: var(--c); padding: 2.5rem; border-radius: 32px;
+      width: 100%; max-width: 450px; border: 1px solid #1f2937; text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.9);
+    }
+    h1 { color: var(--p); font-weight: 200; font-size: 1.6rem; margin-bottom: 2rem; letter-spacing: 2px; }
+    textarea {
+      width: 100%; height: 110px; background: #030712; border: 1px solid #374151;
+      border-radius: 16px; color: white; padding: 15px; font-size: 1.25rem;
+      resize: none; box-sizing: border-box; text-align: center; margin-bottom: 1rem;
+    }
+    textarea:focus { outline: none; border-color: var(--p); }
+    .output-box {
+      background: rgba(0,0,0,0.4); padding: 20px; border-radius: 16px; min-height: 50px;
+      border: 1px dashed #4b5563; font-size: 1.45rem; color: var(--p);
+      word-break: break-all; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      user-select: all;
+    }
+    label { font-size: 0.85rem; color: #6b7280; margin-bottom: 8px; display: block; text-align: right; }
+  </style>
 </head>
 <body>
 
 <div class="card">
-    <h1>Fırtınadan önceki Shani</h1>
-    
-    <span class="label">הקלד הודעה:</span>
-    <textarea id="in" placeholder="כתוב כאן..."></textarea>
+  <h1>Fırtınadan önceki Shani</h1>
 
-    <span class="label">התוצאה:</span>
-    <div id="out" class="output-box">...</div>
+  <label for="mainInput">הקלד כאן (עברית או אימוג'ים):</label>
+  <textarea id="mainInput" placeholder="..."></textarea>
 
-    <div class="actions">
-        <button class="btn-copy" onclick="copyText()">העתק 📋</button>
-        <button class="btn-wa" onclick="sendWA()">שלח בוואטסאפ 📱</button>
-    </div>
+  <label>תוצאה (לחץ להעתקה):</label>
+  <div id="mainOutput" class="output-box">...</div>
 </div>
 
 <script>
-    const map = {
-        'א':'🦉','ב':'🦊','ג':'🐺','ד':'🦁','ה':'🐯','ו':'🦒','ז':'🦓','ח':'🐗','ט':'🐭','י':'🐹',
-        'כ':'🐰','ך':'🥕','ל':'🐻','מ':'🐨','ם':'🌳','נ':'🐼','ן':'🎋','ס':'🐮','ע':'🐷','פ':'🐸',
-        'ף':'🍃','צ':'🐒','ץ':'🍌','ק':'🦄','ר':'🐴','ש':'🐘','ת':'🐪',' ':' '
-    };
-    const rev = Object.fromEntries(Object.entries(map).map(([k, v]) => [v, k]));
+document.addEventListener("DOMContentLoaded", () => {
+  // מילון בקרת איכות - 27 תווים ייחודיים
+  const charMap = {
+    'א':'🦉','ב':'🦊','ג':'🐺','ד':'🦁','ה':'🐯','ו':'🦒','ז':'🦓','ח':'🐗','ט':'🐭','י':'🐹',
+    'כ':'🐰','ך':'🥕','ל':'🐻','מ':'🐨','ם':'🌳','נ':'🐼','ן':'🎋','ס':'🐮','ע':'🐷','פ':'🐸',
+    'ף':'🍃','צ':'🐒','ץ':'🍌','ק':'🦄','ר':'🐴','ש':'🐘','ת':'🐪',' ':' '
+  };
 
-    const input = document.getElementById('in');
-    const output = document.getElementById('out');
+  const emojiMap = {};
+  for (const key in charMap) {
+    if (charMap[key] !== ' ') emojiMap[charMap[key]] = key;
+  }
 
-    input.oninput = () => {
-        const val = input.value;
-        if (!val) { output.innerText = "..."; return; }
-        
-        const isHeb = /[\u0590-\u05FF]/.test(val);
-        output.innerText = Array.from(val).map(c => isHeb ? (map[c] || c) : (rev[c] || c)).join('');
-    };
+  const input = document.getElementById('mainInput');
+  const output = document.getElementById('mainOutput');
 
-    function copyText() {
-        if (output.innerText === "...") return;
-        navigator.clipboard.writeText(output.innerText);
-        const old = output.innerText;
-        output.innerText = "הועתק! ✅";
-        setTimeout(() => output.innerText = old, 1000);
+  if (!input || !output) {
+    console.error("Missing #mainInput or #mainOutput in DOM");
+    return;
+  }
+
+  input.addEventListener('input', () => {
+    const val = input.value;
+    if (!val) { output.textContent = "..."; return; }
+
+    const chars = Array.from(val);
+    const isHebrew = /[\u0590-\u05FF]/.test(val);
+
+    const result = isHebrew
+      ? chars.map(c => charMap[c] ?? c).join('')
+      : chars.map(e => emojiMap[e] ?? e).join('');
+
+    output.textContent = result;
+  });
+
+  async function copyText(text) {
+    // Clipboard API (יעבוד לרוב רק ב-https/localhost)
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
     }
 
-    function sendWA() {
-        const text = output.innerText;
-        if (text === "...") return;
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    // fallback לקבצי file://
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  output.addEventListener('click', async () => {
+    const text = output.textContent;
+    if (!text || text === "...") return;
+
+    try {
+      const ok = await copyText(text);
+      const old = output.textContent;
+      output.textContent = ok ? "הועתק ✅" : "לא הצלחתי להעתיק ❌";
+      setTimeout(() => output.textContent = old, 700);
+    } catch (err) {
+      console.error("Copy failed:", err);
     }
+  });
+});
 </script>
 
 </body>
