@@ -92,4 +92,17 @@
             return emojiMap[e] || e;
         }
 
-        output.onclick = function()
+        output.onclick = function() {
+            if (output.innerText !== "...") {
+                const text = output.innerText;
+                navigator.clipboard.writeText(text).then(function() {
+                    output.innerText = "הועתק! ✅";
+                    setTimeout(function() { output.innerText = text; }, 800);
+                });
+            }
+        };
+    })();
+</script>
+
+</body>
+</html>
