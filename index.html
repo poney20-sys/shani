@@ -2,41 +2,36 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Fırtınadan önceki Shani</title>
     <style>
-        :root { --primary: #a855f7; --bg: #030712; --card: #111827; --text: #f9fafb; }
+        :root { --p: #a855f7; --bg: #030712; --c: #111827; --t: #f9fafb; }
         body {
             font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg); color: var(--text);
-            margin: 0; padding: 20px;
+            background: var(--bg); color: var(--t); margin: 0; padding: 20px;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            /* סילואט נשי בצללים */
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a855f7' opacity='0.08'%3E%3Cpath d='M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: center 85%; background-size: 55% auto;
+            background-repeat: no-repeat; background-position: center 85%; background-size: 60% auto;
         }
         .card {
-            background: var(--card); padding: 2.5rem; border-radius: 32px;
+            background: var(--c); padding: 2.5rem; border-radius: 32px;
             width: 100%; max-width: 450px; border: 1px solid #1f2937; text-align: center;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.9);
-            backdrop-filter: blur(10px);
         }
-        h1 { color: var(--primary); font-weight: 200; font-size: 1.7rem; margin-bottom: 2rem; letter-spacing: 2px; text-transform: uppercase; }
-        label { display: block; margin-bottom: 10px; color: #6b7280; font-size: 0.85rem; text-align: right; font-weight: 600; letter-spacing: 0.5px; }
+        h1 { color: var(--p); font-weight: 200; font-size: 1.6rem; margin-bottom: 2rem; letter-spacing: 2px; }
         textarea {
-            width: 100%; height: 120px; background: rgba(3, 7, 18, 0.6); border: 1px solid #374151;
-            border-radius: 20px; color: white; padding: 18px; font-size: 1.25rem;
-            resize: none; box-sizing: border-box; text-align: center; margin-bottom: 1.5rem;
-            transition: all 0.2s ease;
+            width: 100%; height: 110px; background: #030712; border: 1px solid #374151;
+            border-radius: 16px; color: white; padding: 15px; font-size: 1.25rem;
+            resize: none; box-sizing: border-box; text-align: center; margin-bottom: 1rem;
         }
-        textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 15px rgba(168, 85, 247, 0.15); }
+        textarea:focus { outline: none; border-color: var(--p); }
         .output-box {
-            background: rgba(0,0,0,0.5); padding: 22px; border-radius: 20px; min-height: 60px;
-            border: 1px dashed #4b5563; font-size: 1.5rem; color: var(--primary);
+            background: rgba(0,0,0,0.4); padding: 20px; border-radius: 16px; min-height: 50px;
+            border: 1px dashed #4b5563; font-size: 1.45rem; color: var(--p); 
             word-break: break-all; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s;
         }
-        .output-box:active { transform: scale(0.98); background: rgba(168, 85, 247, 0.05); }
+        .label { font-size: 0.85rem; color: #6b7280; margin-bottom: 8px; display: block; text-align: right; }
     </style>
 </head>
 <body>
@@ -44,64 +39,57 @@
 <div class="card">
     <h1>Fırtınadan önceki Shani</h1>
     
-    <label>הקלד הודעה או הדבק קוד:</label>
-    <textarea id="inputField" placeholder="שלום אבא..."></textarea>
+    <label>הקלד כאן (עברית או אימוג'ים):</label>
+    <textarea id="mainInput" placeholder="..."></textarea>
 
-    <label>תוצאה (לחץ להעתקה מהירה):</label>
-    <div id="resultBox" class="output-box">...</div>
+    <label>תוצאה (לחץ להעתקה):</label>
+    <div id="mainOutput" class="output-box">...</div>
 </div>
 
 <script>
-    // מילון מושלם - 27 תווים ייחודיים (כולל סופיות)
-    const map = {
-        'א':'🦉','ב':'🦊','ג':'🐺','ד':'🦁','ה':'🐯','ו':'🦒','ז':'🦓','ח':'🐗','ט':'🐭','י':'🐹',
-        'כ':'🐰','ך':'🥕',
-        'ל':'🐻',
-        'מ':'🐨','ם':'🌳',
-        'נ':'🐼','ן':'🎋',
-        'ס':'🐮','ע':'🐷',
-        'פ':'🐸','ף':'🍃',
-        'צ':'🐒','ץ':'🍌',
-        'ק':'🦄','ר':'🐴','ש':'🐘','ת':'🐪',' ':' '
-    };
+    (function() {
+        // מילון בקרת איכות - 27 תווים ייחודיים
+        const charMap = {
+            'א':'🦉','ב':'🦊','ג':'🐺','ד':'🦁','ה':'🐯','ו':'🦒','ז':'🦓','ח':'🐗','ט':'🐭','י':'🐹',
+            'כ':'🐰','ך':'🥕','ל':'🐻','מ':'🐨','ם':'🌳','נ':'🐼','ן':'🎋','ס':'🐮','ע':'🐷','פ':'🐸',
+            'ף':'🍃','צ':'🐒','ץ':'🍌','ק':'🦄','ר':'🐴','ש':'🐘','ת':'🐪',' ':' '
+        };
 
-    // יצירת מילון הפוך אוטומטי ומדויק
-    const reverseMap = {};
-    for (const [char, emoji] of Object.entries(map)) {
-        if (emoji !== ' ') reverseMap[emoji] = char;
-    }
-
-    const input = document.getElementById('inputField');
-    const output = document.getElementById('resultBox');
-
-    input.addEventListener('input', () => {
-        const val = input.value;
-        if (!val) { output.innerText = "..."; return; }
-
-        const chars = Array.from(val);
-        // זיהוי שפה: האם יש תו עברי בטווח היוניקוד המתאים?
-        const isHebrew = /[\u0590-\u05FF]/.test(val);
-
-        if (isHebrew) {
-            // מצב קידוד (עברית -> אימוג'י)
-            output.innerText = chars.map(c => map[c] || c).join('');
-        } else {
-            // מצב פענוח (אימוג'י -> עברית)
-            output.innerText = chars.map(c => reverseMap[c] || c).join('');
+        const emojiMap = {};
+        for (let key in charMap) {
+            if (charMap[key] !== ' ') {
+                emojiMap[charMap[key]] = key;
+            }
         }
-    });
 
-    // פונקציית העתקה חלקה
-    output.onclick = () => {
-        if (output.innerText !== "...") {
-            const textToCopy = output.innerText;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                output.innerText = "הועתק! ✅";
-                setTimeout(() => { output.innerText = textToCopy; }, 800);
-            });
+        const input = document.getElementById('mainInput');
+        const output = document.getElementById('mainOutput');
+
+        input.addEventListener('input', function() {
+            const val = input.value;
+            if (!val) { output.innerText = "..."; return; }
+
+            const chars = Array.from(val);
+            // בדיקה האם יש עברית בקלט
+            const isHebrew = /[\u0590-\u05FF]/.test(val);
+
+            let result = "";
+            if (isHebrew) {
+                // קידוד לעברית
+                result = chars.map(c => charToEmoji(c)).join('');
+            } else {
+                // פענוח מאימוג'י
+                result = chars.map(c => emojiToChar(c)).join('');
+            }
+            output.innerText = result;
+        });
+
+        function charToEmoji(c) {
+            return charMap[c] || c;
         }
-    };
-</script>
 
-</body>
-</html>
+        function emojiToChar(e) {
+            return emojiMap[e] || e;
+        }
+
+        output.onclick = function()
