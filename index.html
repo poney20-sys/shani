@@ -5,32 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Fırtınadan önceki Shani</title>
     <style>
-        :root { --p: #a855f7; --bg: #030712; --c: #111827; --t: #f9fafb; }
+        :root { --p: #a855f7; --bg: #020617; --c: #0f172a; --t: #f1f5f9; }
         body {
             font-family: system-ui, -apple-system, sans-serif;
             background: var(--bg); color: var(--t); margin: 0; padding: 20px;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a855f7' opacity='0.07'%3E%3Cpath d='M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a855f7' opacity='0.08'%3E%3Cpath d='M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z'/%3E%3C/svg%3E");
             background-repeat: no-repeat; background-position: center 85%; background-size: 50% auto;
         }
         .card {
             background: var(--c); padding: 2rem; border-radius: 28px;
-            width: 100%; max-width: 450px; border: 1px solid #1f2937; text-align: center;
+            width: 100%; max-width: 450px; border: 1px solid #1e293b; text-align: center;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
         }
         h1 { color: var(--p); font-weight: 200; font-size: 1.6rem; margin-bottom: 1.8rem; text-shadow: 0 0 10px rgba(168,85,247,0.3); }
         textarea {
-            width: 100%; height: 110px; background: #030712; border: 1px solid #374151;
+            width: 100%; height: 110px; background: #020617; border: 1px solid #334155;
             border-radius: 16px; color: white; padding: 15px; font-size: 1.2rem;
             resize: none; box-sizing: border-box; text-align: center; margin-bottom: 1rem;
         }
         textarea:focus { outline: none; border-color: var(--p); }
         .output-box {
-            background: rgba(0,0,0,0.4); padding: 18px; border-radius: 16px; min-height: 50px;
-            border: 1px dashed #4b5563; font-size: 1.4rem; color: var(--p); 
+            background: rgba(0,0,0,0.5); padding: 18px; border-radius: 16px; min-height: 50px;
+            border: 1px dashed #475569; font-size: 1.4rem; color: var(--p); 
             word-break: break-all; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
-        .label { font-size: 0.85rem; color: #6b7280; margin-bottom: 8px; display: block; text-align: right; }
+        .label { font-size: 0.85rem; color: #64748b; margin-bottom: 8px; display: block; text-align: right; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -38,45 +38,11 @@
 <div class="card">
     <h1>Fırtınadan önceki Shani</h1>
     
-    <span class="label">קלט (עברית או אימוג'ים):</span>
-    <textarea id="txt" placeholder="הקלד כאן..."></textarea>
+    <span class="label">הקלד הודעה או הדבק קוד:</span>
+    <textarea id="txt" placeholder="שלום אבא..."></textarea>
 
-    <span class="label">תוצאה (לחץ להעתקה):</span>
+    <span class="label">התוצאה (לחץ להעתקה):</span>
     <div id="out" class="output-box">...</div>
 </div>
 
 <script>
-    const m = {'א':'🦉','ב':'🦊','ג':'🐺','ד':'🦁','ה':'🐯','ו':'🦒','ז':'🦓','ח':'🐗','ט':'🐭','י':'🐹','כ':'🐰','ך':'🐰','ל':'🐻','מ':'🐨','ם':'🐨','נ':'🐼','ן':'🐼','ס':'🐮','ע':'🐷','פ':'🐸','ף':'🐸','צ':'🐒','ץ':'🐒','ק':'🦄','ר':'🐴','ש':'🐘','ת':'🐪',' ':' '};
-    const r = {}; for(let k in m) if(m[k]!==' ') r[m[k]]=k;
-
-    const i = document.getElementById('txt');
-    const o = document.getElementById('out');
-
-    i.addEventListener('input', () => {
-        const v = i.value;
-        if(!v) { o.innerText = "..."; return; }
-        
-        // בדיקה יציבה: האם יש תו עברי אחד לפחות?
-        const heb = /[\u0590-\u05FF]/.test(v);
-        const chars = Array.from(v);
-
-        if(heb) {
-            o.innerText = chars.map(c => m[c] || c).join('');
-        } else {
-            o.innerText = chars.map(c => r[c] || c).join('');
-        }
-    });
-
-    o.onclick = () => {
-        if(o.innerText !== "...") {
-            navigator.clipboard.writeText(o.innerText).then(() => {
-                const prev = o.innerText;
-                o.innerText = "הועתק! ✅";
-                setTimeout(() => o.innerText = prev, 800);
-            });
-        }
-    };
-</script>
-
-</body>
-</html>
