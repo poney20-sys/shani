@@ -1,121 +1,131 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Fırtınadan önceki Shani</title>
-  <style>
-    :root { --p: #a855f7; --bg: #030712; --c: #111827; --t: #f9fafb; }
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: var(--bg); color: var(--t); margin: 0; padding: 20px;
-      display: flex; justify-content: center; align-items: center; min-height: 100vh;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a855f7' opacity='0.08'%3E%3Cpath d='M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: center 85%; background-size: 60% auto;
-    }
-    .card {
-      background: var(--c); padding: 2.5rem; border-radius: 32px;
-      width: 100%; max-width: 450px; border: 1px solid #1f2937; text-align: center;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.9);
-    }
-    h1 { color: var(--p); font-weight: 200; font-size: 1.6rem; margin-bottom: 2rem; letter-spacing: 2px; }
-    textarea {
-      width: 100%; height: 110px; background: #030712; border: 1px solid #374151;
-      border-radius: 16px; color: white; padding: 15px; font-size: 1.25rem;
-      resize: none; box-sizing: border-box; text-align: center; margin-bottom: 1rem;
-    }
-    textarea:focus { outline: none; border-color: var(--p); }
-    .output-box {
-      background: rgba(0,0,0,0.4); padding: 20px; border-radius: 16px; min-height: 50px;
-      border: 1px dashed #4b5563; font-size: 1.45rem; color: var(--p);
-      word-break: break-all; cursor: pointer; display: flex; align-items: center; justify-content: center;
-      user-select: all;
-    }
-    label { font-size: 0.85rem; color: #6b7280; margin-bottom: 8px; display: block; text-align: right; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Shani Cipher 3.0</title>
+    <style>
+        :root { --p: #a855f7; --bg: #030712; --c: #111827; --t: #f9fafb; }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--bg); color: var(--t); margin: 0; padding: 20px;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+        }
+        .card {
+            background: var(--c); padding: 2rem; border-radius: 28px;
+            width: 100%; max-width: 420px; border: 1px solid #1f2937; text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);
+        }
+        h1 { color: var(--p); font-weight: 200; font-size: 1.5rem; margin-bottom: 1.5rem; letter-spacing: 2px; }
+        
+        .mode-indicator { 
+            font-size: 0.75rem; color: var(--p); text-transform: uppercase; 
+            margin-bottom: 10px; display: block; opacity: 0.8;
+        }
+
+        textarea {
+            width: 100%; height: 120px; background: #000; border: 1px solid #374151;
+            border-radius: 16px; color: #fff; padding: 15px; font-size: 1.2rem;
+            resize: none; box-sizing: border-box; text-align: center; transition: 0.3s;
+        }
+        textarea:focus { outline: none; border-color: var(--p); box-shadow: 0 0 10px rgba(168, 85, 247, 0.2); }
+
+        .output-container { margin-top: 1.5rem; position: relative; }
+        .output-box {
+            background: rgba(168, 85, 247, 0.03); padding: 20px; border-radius: 16px;
+            border: 1px dashed #4b5563; font-size: 1.4rem; color: var(--p); 
+            min-height: 60px; word-break: break-all; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1.5rem; }
+        button {
+            padding: 14px; border-radius: 12px; border: none; cursor: pointer;
+            font-weight: 600; font-size: 0.9rem; transition: 0.2s;
+        }
+        .btn-clear { background: #374151; color: #d1d5db; }
+        .btn-copy { background: var(--p); color: white; }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
+
+        .label { font-size: 0.8rem; color: #6b7280; margin-bottom: 6px; display: block; text-align: right; }
+    </style>
 </head>
 <body>
 
 <div class="card">
-  <h1>Fırtınadan önceki Shani</h1>
+    <h1>SHANI CIPHER 3.0</h1>
+    
+    <div id="status" class="mode-indicator">ממתין לקלט...</div>
+    
+    <label class="label">קלט (עברית או אימוג'ים):</label>
+    <textarea id="mainInput" placeholder="הקלד כאן..."></textarea>
 
-  <label for="mainInput">הקלד כאן (עברית או אימוג'ים):</label>
-  <textarea id="mainInput" placeholder="..."></textarea>
+    <div class="output-container">
+        <label class="label">תוצאה:</label>
+        <div id="mainOutput" class="output-box" onclick="copyResult()">...</div>
+    </div>
 
-  <label>תוצאה (לחץ להעתקה):</label>
-  <div id="mainOutput" class="output-box">...</div>
+    <div class="actions">
+        <button class="btn-clear" onclick="clearAll()">נקה הכל</button>
+        <button class="btn-copy" onclick="copyResult()">העתק תוצאה</button>
+    </div>
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  // מילון בקרת איכות - 27 תווים ייחודיים
-  const charMap = {
-    'א':'🦉','ב':'🦊','ג':'🐺','ד':'🦁','ה':'🐯','ו':'🦒','ז':'🦓','ח':'🐗','ט':'🐭','י':'🐹',
-    'כ':'🐰','ך':'🥕','ל':'🐻','מ':'🐨','ם':'🌳','נ':'🐼','ן':'🎋','ס':'🐮','ע':'🐷','פ':'🐸',
-    'ף':'🍃','צ':'🐒','ץ':'🍌','ק':'🦄','ר':'🐴','ש':'🐘','ת':'🐪',' ':' '
-  };
+    const charMap = {
+        'א':'🦉','ב':'🦊','ג':'🐺','ד':'🦁','ה':'🐯','ו':'🦒','ז':'🦓','ח':'🐗','ט':'🐭','י':'🐹',
+        'כ':'🐰','ך':'🥕','ל':'🐻','מ':'🐨','ם':'🌳','נ':'🐼','ן':'🎋','ס':'🐮','ע':'🐷','פ':'🐸',
+        'ף':'🍃','צ':'🐒','ץ':'🍌','ק':'🦄','ר':'🐴','ש':'🐘','ת':'🐪',' ':' '
+    };
 
-  const emojiMap = {};
-  for (const key in charMap) {
-    if (charMap[key] !== ' ') emojiMap[charMap[key]] = key;
-  }
+    const emojiMap = Object.fromEntries(Object.entries(charMap).map(([k, v]) => [v, k]));
 
-  const input = document.getElementById('mainInput');
-  const output = document.getElementById('mainOutput');
+    const input = document.getElementById('mainInput');
+    const output = document.getElementById('mainOutput');
+    const status = document.getElementById('status');
 
-  if (!input || !output) {
-    console.error("Missing #mainInput or #mainOutput in DOM");
-    return;
-  }
+    input.addEventListener('input', () => {
+        const val = input.value;
+        if (!val) { 
+            output.innerText = "..."; 
+            status.innerText = "ממתין לקלט...";
+            return; 
+        }
 
-  input.addEventListener('input', () => {
-    const val = input.value;
-    if (!val) { output.textContent = "..."; return; }
+        const isHebrew = /[\u0590-\u05FF]/.test(val);
+        const chars = Array.from(val);
+        
+        if (isHebrew) {
+            status.innerText = "מצב: הצפנה (HE → EMOJI)";
+            output.innerText = chars.map(c => charMap[c] || c).join('');
+        } else {
+            status.innerText = "מצב: פענוח (EMOJI → HE)";
+            output.innerText = chars.map(c => emojiMap[c] || c).join('');
+        }
+    });
 
-    const chars = Array.from(val);
-    const isHebrew = /[\u0590-\u05FF]/.test(val);
-
-    const result = isHebrew
-      ? chars.map(c => charMap[c] ?? c).join('')
-      : chars.map(e => emojiMap[e] ?? e).join('');
-
-    output.textContent = result;
-  });
-
-  async function copyText(text) {
-    // Clipboard API (יעבוד לרוב רק ב-https/localhost)
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text);
-      return true;
+    function clearAll() {
+        input.value = "";
+        output.innerText = "...";
+        status.innerText = "ממתין לקלט...";
+        input.focus();
     }
 
-    // fallback לקבצי file://
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    ta.style.position = "fixed";
-    ta.style.left = "-9999px";
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    const ok = document.execCommand("copy");
-    document.body.removeChild(ta);
-    return ok;
-  }
-
-  output.addEventListener('click', async () => {
-    const text = output.textContent;
-    if (!text || text === "...") return;
-
-    try {
-      const ok = await copyText(text);
-      const old = output.textContent;
-      output.textContent = ok ? "הועתק ✅" : "לא הצלחתי להעתיק ❌";
-      setTimeout(() => output.textContent = old, 700);
-    } catch (err) {
-      console.error("Copy failed:", err);
+    function copyResult() {
+        const text = output.innerText;
+        if (text === "...") return;
+        
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = text;
+            output.innerText = "הועתק בהצלחה! ✅";
+            output.style.color = "#25D366";
+            setTimeout(() => {
+                output.innerText = originalText;
+                output.style.color = "var(--p)";
+            }, 1000);
+        });
     }
-  });
-});
 </script>
 
 </body>
